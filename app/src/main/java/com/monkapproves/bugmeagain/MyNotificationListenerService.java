@@ -11,6 +11,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -44,12 +45,13 @@ public class MyNotificationListenerService extends NotificationListenerService {
         if(getCurrentInterruptionFilter() > NotificationManager.INTERRUPTION_FILTER_ALL) {
             if (sbn.isOngoing()
                     || !sbn.isClearable()
-                    || notif.category.equals(Notification.CATEGORY_PROGRESS)
-                    || notif.category.equals(Notification.CATEGORY_CALL)
-                    || notif.category.equals(Notification.CATEGORY_ERROR)
-                    || notif.category.equals(Notification.CATEGORY_SYSTEM)
-                    || notif.category.equals(Notification.CATEGORY_SERVICE)
-                    || notif.category.equals(Notification.CATEGORY_TRANSPORT)
+                    || (notif.category != null &&
+                        (notif.category.equals(Notification.CATEGORY_PROGRESS)
+                        || notif.category.equals(Notification.CATEGORY_CALL)
+                        || notif.category.equals(Notification.CATEGORY_ERROR)
+                        || notif.category.equals(Notification.CATEGORY_SYSTEM)
+                        || notif.category.equals(Notification.CATEGORY_SERVICE)
+                        || notif.category.equals(Notification.CATEGORY_TRANSPORT)))
                     ) {
                 Log.i(TAG, "Not Targeting these notifs. Let them be.");
                 return;
@@ -77,8 +79,15 @@ public class MyNotificationListenerService extends NotificationListenerService {
             StatusBarNotification sbn = ((StatusBarNotification)pair.getValue());
             Notification notif = sbn.getNotification();
             notif.extras.putChar("replayed", 'Y');
-            notif.actions = new Notification.Action[] { new Notification.Action.Builder(R.drawable.ic_info_black_24dp,
-                            getString(R.string.snooze), null).build()};
+            Notification.Action actions[] = new Notification.Action[notif.actions.length+1];
+            int k=0;
+            for(Notification.Action action : notif.actions)
+            {
+                actions[k++] = action;
+            }
+            actions[k] = new Notification.Action.Builder(R.drawable.ic_info_black_24dp,
+                    getString(R.string.snooze), null).build();
+            notif.actions = actions;
             mNotifyMgr.notify(sbn.getId(), notif);
         }
         snoozedNotifs.clear();
