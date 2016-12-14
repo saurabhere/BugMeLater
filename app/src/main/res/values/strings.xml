@@ -1,66 +1,37 @@
 <resources>
-    <string name="app_name">Bug Me Again</string>
+    <string name="app_name">later</string>
     <string name="app_name1">One</string>
     <string name="app_name2">Two</string>
     <string name="app_name3">Three</string>
     <string name="app_name4">Four</string>
-    <string name="snooze">Snooze</string>
     <string name="notification_listener_service_name">Bug Me Again</string>
     <!-- Strings related to Settings -->
 
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <!--System notification settings-->
+    <string name="pref_system_notification_settings_title">System notification settings</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
+    <!--Snoozing notifications-->
+    <string name="pref_snooze_title">Snooze</string>
+    <string name="pref_snooze_description">When this feature is turned on, you can snooze notifications to a time or place.</string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
+    <!-- Blocking notifications -->
+    <string name="pref_block_notifications_title">Block notifications</string>
+    <string name="pref_block_notifications_description">When this feature is turned on, you can block notifications based on the system interruption levels, work hours, or custom rules</string>
+    <string name="pref_block_by_interruption_title">Interruptions</string>
+    <string name="pref_block_by_interruption_description">Block notifications based on system interruptions filter set</string>
+    <string name="pref_interruption_filter_settings_title">Set interruptions filter</string>
 
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
+    <string name="pref_work_hours_title">Work hours</string>
+    <string name="pref_work_hours_description">Block notifications based on your set work hours</string>
+
+    <string-array name="pref_interruption_filters_titles">
+        <item>All</item>
+        <item>Priority</item>
+        <item>None</item>
     </string-array>
-    <string-array name="pref_example_list_values">
+    <string-array name="pref_interruption_filters_values">
         <item>1</item>
-        <item>0</item>
-        <item>-1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
 </resources>

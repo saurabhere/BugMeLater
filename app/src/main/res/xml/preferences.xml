@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceScreen
+        android:title="@string/pref_system_notification_settings_title"
+        android:summary="Notification access has been granted"
+        android:key="pref_key_system_notification_settings"
+        android:persistent="false">
+        <intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"/>
+    </PreferenceScreen>
+
+    <PreferenceCategory
+        android:title="Blocking notifications"
+        android:key="pref_key_block_notifications_settings">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_key_block_notifications"
+            android:summary="@string/pref_block_notifications_description"
+            android:title="@string/pref_block_notifications_title" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_key_block_by_interruption"
+            android:dependency="pref_key_block_notifications"
+            android:title="@string/pref_block_by_interruption_title"
+            android:summary="@string/pref_block_by_interruption_description"/>
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_interruption_filters_titles"
+            android:entryValues="@array/pref_interruption_filters_values"
+            android:key="pref_key_interruption_filter_settings"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:dependency="pref_key_block_by_interruption"
+            android:summary="All"
+            android:title="@string/pref_interruption_filter_settings_title" />
+        <SwitchPreference
+            android:title="Work hours"
+            android:key="pref_key_work_hours"
+            android:dependency="pref_key_block_notifications"
+            android:summary="Block notifications based on your set work hours">
+        </SwitchPreference>
+        <com.monkapproves.bugmeagain.preferences.TimePreference
+            android:key="pref_key_work_hours_start"
+            android:title="Start"
+            android:dependency="pref_key_work_hours"/>
+        <com.monkapproves.bugmeagain.preferences.TimePreference
+            android:key="pref_key_work_hours_end"
+            android:title="End"
+            android:dependency="pref_key_work_hours"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Snoozing notifications"
+        android:key="pref_key_snooze_settings">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_key_snooze"
+            android:summary="@string/pref_snooze_description"
+            android:title="@string/pref_snooze_title"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -86,7 +86,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
                 actions[k++] = action;
             }
             actions[k] = new Notification.Action.Builder(R.drawable.ic_info_black_24dp,
-                    getString(R.string.snooze), null).build();
+                    getString(R.string.pref_snooze_title), null).build();
             notif.actions = actions;
             mNotifyMgr.notify(sbn.getId(), notif);
         }
