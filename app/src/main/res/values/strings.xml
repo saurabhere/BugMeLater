@@ -5,6 +5,8 @@
     <string name="app_name3">Three</string>
     <string name="app_name4">Four</string>
     <string name="notification_listener_service_name">Bug Me Again</string>
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
     <!-- Strings related to Settings -->
 
     <!--System notification settings-->

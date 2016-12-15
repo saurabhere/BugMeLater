@@ -41,10 +41,12 @@
         <com.monkapproves.bugmeagain.preferences.TimePreference
             android:key="pref_key_work_hours_start"
             android:title="Start"
+            android:defaultValue="09:00 AM"
             android:dependency="pref_key_work_hours"/>
         <com.monkapproves.bugmeagain.preferences.TimePreference
             android:key="pref_key_work_hours_end"
             android:title="End"
+            android:defaultValue="05:00 PM"
             android:dependency="pref_key_work_hours"/>
     </PreferenceCategory>
 
