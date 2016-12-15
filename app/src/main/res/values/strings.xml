@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">later</string>
+    <string name="app_name">Later</string>
     <string name="app_name1">One</string>
     <string name="app_name2">Two</string>
     <string name="app_name3">Three</string>
@@ -9,6 +9,7 @@
 
     <!--System notification settings-->
     <string name="pref_system_notification_settings_title">System notification settings</string>
+    <string name="pref_system_notification_settings_summary">Change notification access for Later</string>
 
     <!--Snoozing notifications-->
     <string name="pref_snooze_title">Snooze</string>

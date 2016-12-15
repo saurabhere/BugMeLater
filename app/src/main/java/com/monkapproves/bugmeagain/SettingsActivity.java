@@ -3,8 +3,11 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.service.notification.NotificationListenerService;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -13,8 +16,20 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-public class SettingsActivity extends PreferenceActivity {
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private AppCompatDelegate mDelegate;
+    private static final String KEY_PREF_INTERRUPTION_FILTER = "pref_key_interruption_filter_settings";
+    private static final Map<Integer, String> mpInterruptionFilter = new HashMap<>();
+
+    static {
+        mpInterruptionFilter.put(NotificationListenerService.INTERRUPTION_FILTER_ALL, "All");
+        mpInterruptionFilter.put(NotificationListenerService.INTERRUPTION_FILTER_PRIORITY, "Priority");
+        mpInterruptionFilter.put(NotificationListenerService.INTERRUPTION_FILTER_NONE, "None");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +39,20 @@ public class SettingsActivity extends PreferenceActivity {
         setContentView(R.layout.activity_settings);
         setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
         addPreferencesFromResource(R.xml.preferences);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -64,6 +93,19 @@ public class SettingsActivity extends PreferenceActivity {
             mDelegate = AppCompatDelegate.create(this, null);
         }
         return mDelegate;
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                          String key) {
+        switch (key) {
+            case KEY_PREF_INTERRUPTION_FILTER: {
+                Preference filterPref = findPreference(key);
+                // Set summary to be the user-description for the selected value
+                String interruptionFilter = mpInterruptionFilter.get(Integer.parseInt(sharedPreferences.getString(key, "")));
+                filterPref.setSummary(interruptionFilter);
+                break;
+            }
+        }
     }
 
     public void buttonClicked(View v) {

@@ -2,9 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceScreen
         android:title="@string/pref_system_notification_settings_title"
-        android:summary="Notification access has been granted"
+        android:summary="@string/pref_system_notification_settings_summary"
         android:key="pref_key_system_notification_settings"
-        android:persistent="false">
+        android:persistent="true">
         <intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"/>
     </PreferenceScreen>
 
