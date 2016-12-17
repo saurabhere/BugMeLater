@@ -14,22 +14,16 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsActivity extends PreferenceActivity {
     private AppCompatDelegate mDelegate;
-    private static final String KEY_PREF_INTERRUPTION_FILTER = "pref_key_interruption_filter_settings";
-    private static final Map<Integer, String> mpInterruptionFilter = new HashMap<>();
-
-    static {
-        mpInterruptionFilter.put(NotificationListenerService.INTERRUPTION_FILTER_ALL, "All");
-        mpInterruptionFilter.put(NotificationListenerService.INTERRUPTION_FILTER_PRIORITY, "Priority");
-        mpInterruptionFilter.put(NotificationListenerService.INTERRUPTION_FILTER_NONE, "None");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +36,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = mDelegate.getMenuInflater();
+        inflater.inflate(R.menu.settings, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -93,19 +80,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             mDelegate = AppCompatDelegate.create(this, null);
         }
         return mDelegate;
-    }
-
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                                          String key) {
-        switch (key) {
-            case KEY_PREF_INTERRUPTION_FILTER: {
-                Preference filterPref = findPreference(key);
-                // Set summary to be the user-description for the selected value
-                String interruptionFilter = mpInterruptionFilter.get(Integer.parseInt(sharedPreferences.getString(key, "")));
-                filterPref.setSummary(interruptionFilter);
-                break;
-            }
-        }
     }
 
     public void buttonClicked(View v) {

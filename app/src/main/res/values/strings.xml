@@ -5,8 +5,11 @@
     <string name="app_name3">Three</string>
     <string name="app_name4">Four</string>
     <string name="notification_listener_service_name">Bug Me Again</string>
+
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
     <!-- Strings related to Settings -->
 
     <!--System notification settings-->
@@ -15,26 +18,28 @@
 
     <!--Snoozing notifications-->
     <string name="pref_snooze_title">Snooze</string>
-    <string name="pref_snooze_description">When this feature is turned on, you can snooze notifications to a time or place.</string>
+    <string name="pref_snooze_description">When this feature is turned on, you can snooze notifications to a time or place</string>
 
     <!-- Blocking notifications -->
-    <string name="pref_block_notifications_title">Block notifications</string>
-    <string name="pref_block_notifications_description">When this feature is turned on, you can block notifications based on the system interruption levels, work hours, or custom rules</string>
+    <string name="pref_block_notifications_title">Blocking notifications</string>
+    <string name="pref_block_notifications_description">Turn off notifications while you are busy and replay them later.\nIf you wish to see all your notifications now, disable the below preferences</string>
     <string name="pref_block_by_interruption_title">Interruptions</string>
-    <string name="pref_block_by_interruption_description">Block notifications based on system interruptions filter set</string>
+    <string name="pref_block_by_interruption_description">Block notifications based on system interruptions filter</string>
     <string name="pref_interruption_filter_settings_title">Set interruptions filter</string>
 
     <string name="pref_work_hours_title">Work hours</string>
-    <string name="pref_work_hours_description">Block notifications based on your set work hours</string>
+    <string name="pref_work_hours_description">Block notifications based on your work hours</string>
 
     <string-array name="pref_interruption_filters_titles">
-        <item>All</item>
         <item>Priority</item>
+        <item>Alarms</item>
         <item>None</item>
     </string-array>
     <string-array name="pref_interruption_filters_values">
-        <item>1</item>
         <item>2</item>
+        <item>4</item>
         <item>3</item>
     </string-array>
+
+    <string name="help">Help &amp; Feedback</string>
 </resources>
