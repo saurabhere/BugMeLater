@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">Renotify</string>
-    <string name="app_name1">One</string>
-    <string name="app_name2">Two</string>
-    <string name="app_name3">Three</string>
-    <string name="app_name4">Four</string>
-    <string name="notification_listener_service_name">Bug Me Again</string>
+    <string name="notification_listener_service_name">@string/app_name</string>
 
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
@@ -43,5 +39,8 @@
     </string-array>
 
     <string name="help">Help &amp; Feedback</string>
+    <string name="test_notif">Send a Test Notification</string>
     <string name="show_all">Show all</string>
+    <string name="test_notification_title">Hey There!</string>
+    <string name="test_notification_text">Verify everything is setup perfectly.</string>
 </resources>

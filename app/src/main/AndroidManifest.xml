@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.monkapproves.bugmeagain">
+    package="com.monkapproves.renotify">
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="21" />
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.monkapproves.renotify.SettingsActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
         </activity>
 
         <service
-            android:name=".MyNotificationListenerService"
+            android:name="com.monkapproves.renotify.MyNotificationListenerService"
             android:label="@string/notification_listener_service_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>

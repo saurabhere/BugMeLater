@@ -1,4 +1,4 @@
-package com.monkapproves.bugmeagain.preferences;
+package com.monkapproves.renotify.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 
-import com.monkapproves.bugmeagain.R;
+import com.monkapproves.renotify.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -85,6 +85,7 @@ public class TimePreference extends DialogPreference {
                     e.printStackTrace();
                 }
             }
+            persistLong(calendar.getTimeInMillis());
         }
     }
 

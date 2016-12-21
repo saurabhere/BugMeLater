@@ -1,4 +1,4 @@
-package com.monkapproves.bugmeagain;
+package com.monkapproves.renotify;
 
 import org.junit.Test;
 

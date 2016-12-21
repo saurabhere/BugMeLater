@@ -28,6 +28,7 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:summary="%s"
+            android:defaultValue="2"
             android:dependency="pref_key_block_by_interruption"
             android:title="@string/pref_interruption_filter_settings_title" />
         <CheckBoxPreference
@@ -36,12 +37,12 @@
             android:dependency="pref_key_block_notifications"
             android:summary="@string/pref_work_hours_description">
         </CheckBoxPreference>
-        <com.monkapproves.bugmeagain.preferences.TimePreference
+        <com.monkapproves.renotify.preferences.TimePreference
             android:key="pref_key_work_hours_start"
             android:title="@string/start"
             android:defaultValue="09:00 AM"
             android:dependency="pref_key_work_hours"/>
-        <com.monkapproves.bugmeagain.preferences.TimePreference
+        <com.monkapproves.renotify.preferences.TimePreference
             android:key="pref_key_work_hours_end"
             android:title="@string/end"
             android:defaultValue="05:00 PM"

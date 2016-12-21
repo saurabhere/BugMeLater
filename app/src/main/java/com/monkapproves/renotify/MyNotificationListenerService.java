@@ -1,17 +1,18 @@
-package com.monkapproves.bugmeagain;
+package com.monkapproves.renotify;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class MyNotificationListenerService extends NotificationListenerService {
     private String TAG = this.getClass().getSimpleName();
     private Map<String, StatusBarNotification> snoozedNotifs = new HashMap<String, StatusBarNotification>();
-
+    SharedPreferences preferences;
     private NLServiceReceiver nlservicereciver;
     @Override
     public void onCreate() {
@@ -28,6 +29,8 @@ public class MyNotificationListenerService extends NotificationListenerService {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
         registerReceiver(nlservicereciver, filter);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
     }
     @Override
     public void onDestroy() {
@@ -39,10 +42,26 @@ public class MyNotificationListenerService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         Notification notif = sbn.getNotification();
         if(notif.extras.getChar("replayed") == 'Y') {
-            Log.i(TAG, "can't touch this.");
             return;
         }
-        if(getCurrentInterruptionFilter() > NotificationManager.INTERRUPTION_FILTER_ALL) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean block_notifs = preferences.getBoolean("pref_key_block_notifications", false);
+        if(!block_notifs)
+            return;
+        Boolean interruptions = preferences.getBoolean("pref_key_block_by_interruption", false);
+        Boolean workHoursSwitch = preferences.getBoolean("pref_key_work_hours", false);
+        Long currentDateTime = new Date().getTime();
+        Date d = new Date();
+        d.setHours(0);
+        d.setMinutes(0);
+        d.setSeconds(0);
+        Long currentTime = currentDateTime - d.getTime() + d.getTimezoneOffset()*60*1000;
+        if((interruptions && getCurrentInterruptionFilter() >= preferences.getInt("pref_key_interruption_filter_settings", 0))
+                || (workHoursSwitch
+                    && preferences.getLong("pref_key_work_hours_start", 0) <  currentTime
+                    && currentTime < preferences.getLong("pref_key_work_hours_end", 0)
+                    ))
+        {
             if (sbn.isOngoing()
                     || !sbn.isClearable()
                     || (notif.category != null &&
@@ -79,7 +98,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
             StatusBarNotification sbn = ((StatusBarNotification)pair.getValue());
             Notification notif = sbn.getNotification();
             notif.extras.putChar("replayed", 'Y');
-            Notification.Action actions[] = new Notification.Action[notif.actions.length+1];
+/*            Notification.Action actions[] = new Notification.Action[notif.actions.length+1];
             int k=0;
             for(Notification.Action action : notif.actions)
             {
@@ -87,7 +106,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
             }
             actions[k] = new Notification.Action.Builder(R.drawable.ic_info_black_24dp,
                     getString(R.string.pref_snooze_title), null).build();
-            notif.actions = actions;
+            notif.actions = actions;*/
             mNotifyMgr.notify(sbn.getId(), notif);
         }
         snoozedNotifs.clear();

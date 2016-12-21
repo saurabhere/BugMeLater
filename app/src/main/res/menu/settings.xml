@@ -8,4 +8,8 @@
         android:id="@+id/action_feedback"
         android:title="@string/help"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/btnCreateNotify"
+        android:title="@string/test_notif"
+        app:showAsAction="never" />
 </menu>
