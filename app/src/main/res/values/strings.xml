@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Later</string>
+    <string name="app_name">Renotify</string>
     <string name="app_name1">One</string>
     <string name="app_name2">Two</string>
     <string name="app_name3">Three</string>
@@ -14,15 +14,16 @@
 
     <!--System notification settings-->
     <string name="pref_system_notification_settings_title">System notification settings</string>
-    <string name="pref_system_notification_settings_summary">Change notification access for Later</string>
+    <string name="pref_system_notification_settings_summary">Change notification access for Renotify</string>
 
     <!--Snoozing notifications-->
     <string name="pref_snooze_title">Snooze</string>
     <string name="pref_snooze_description">When this feature is turned on, you can snooze notifications to a time or place</string>
 
     <!-- Blocking notifications -->
-    <string name="pref_block_notifications_title">Blocking notifications</string>
-    <string name="pref_block_notifications_description">Turn off notifications while you are busy and replay them later.\nIf you wish to see all your notifications now, disable the below preferences</string>
+    <string name="pref_block_notifications_settings_title">Blocking notifications</string>
+    <string name="pref_block_notifications_title">Do not disturb</string>
+    <string name="pref_block_notifications_description">Block notifications while you are busy and see them later</string>
     <string name="pref_block_by_interruption_title">Interruptions</string>
     <string name="pref_block_by_interruption_description">Block notifications based on system interruptions filter</string>
     <string name="pref_interruption_filter_settings_title">Set interruptions filter</string>
@@ -42,4 +43,5 @@
     </string-array>
 
     <string name="help">Help &amp; Feedback</string>
+    <string name="show_all">Show all</string>
 </resources>

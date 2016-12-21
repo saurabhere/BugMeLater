@@ -1,5 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_renotify"
+        android:title="@string/show_all"
+        android:icon="@drawable/ic_action_renotify"
+        app:showAsAction="ifRoom|withText" />
+    <item
         android:id="@+id/action_feedback"
         android:title="@string/help"
         app:showAsAction="never" />

@@ -9,14 +9,16 @@
     </PreferenceScreen>
 
     <PreferenceCategory
-        android:title="@string/pref_block_notifications_title"
+        android:title="@string/pref_block_notifications_settings_title"
         android:key="pref_key_block_notifications_settings">
-        <Preference
-            android:summary="@string/pref_block_notifications_description"
-            android:selectable="false"/>
         <SwitchPreference
+            android:title="@string/pref_block_notifications_title"
+            android:summary="@string/pref_block_notifications_description"
+            android:key="pref_key_block_notifications"/>
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_key_block_by_interruption"
+            android:dependency="pref_key_block_notifications"
             android:title="@string/pref_block_by_interruption_title"
             android:summary="@string/pref_block_by_interruption_description" />
         <ListPreference
@@ -28,11 +30,12 @@
             android:summary="%s"
             android:dependency="pref_key_block_by_interruption"
             android:title="@string/pref_interruption_filter_settings_title" />
-        <SwitchPreference
+        <CheckBoxPreference
             android:title="@string/pref_work_hours_title"
             android:key="pref_key_work_hours"
+            android:dependency="pref_key_block_notifications"
             android:summary="@string/pref_work_hours_description">
-        </SwitchPreference>
+        </CheckBoxPreference>
         <com.monkapproves.bugmeagain.preferences.TimePreference
             android:key="pref_key_work_hours_start"
             android:title="@string/start"
@@ -45,14 +48,14 @@
             android:dependency="pref_key_work_hours"/>
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="Snoozing notifications"
-        android:key="pref_key_snooze_settings">
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="pref_key_snooze"
-            android:summary="@string/pref_snooze_description"
-            android:title="@string/pref_snooze_title"/>
-    </PreferenceCategory>
+    <!--<PreferenceCategory-->
+        <!--android:title="Snoozing notifications"-->
+        <!--android:key="pref_key_snooze_settings">-->
+        <!--<SwitchPreference-->
+            <!--android:defaultValue="false"-->
+            <!--android:key="pref_key_snooze"-->
+            <!--android:summary="@string/pref_snooze_description"-->
+            <!--android:title="@string/pref_snooze_title"/>-->
+    <!--</PreferenceCategory>-->
 
 </PreferenceScreen>
