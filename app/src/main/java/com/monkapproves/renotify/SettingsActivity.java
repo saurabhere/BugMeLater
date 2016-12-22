@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private AppCompatDelegate mDelegate;
+
+    public static final String PREF_SHOW_REMINDER = "pref_show_reminder";
     public static final String PREF_KEY_BLOCK_NOTIFICATIONS = "pref_key_block_notifications";
     public static final String PREF_KEY_INTERRUPTIONS = "pref_key_block_by_interruption";
     public static final String PREF_KEY_INTERRUPTION_FILTER = "pref_key_interruption_filter_settings";
@@ -33,12 +35,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         if (isFirstRun) {
             //show start activity
             startActivity(new Intent(SettingsActivity.this, IntroActivity.class));
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                    .putBoolean("isFirstRun", false).commit();
         }
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstRun", false).commit();
-
-        checkNotificationAccess();
-
+        else
+        {
+            checkNotificationAccess();
+        }
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
@@ -150,6 +153,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 Intent i = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
                 i.putExtra("command", "flush");
                 sendBroadcast(i);
+                return true;
+            case R.id.pref_show_reminder:
+                item.setChecked(!item.isChecked());
+                SharedPreferences settings = getPreferenceScreen().getSharedPreferences();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(PREF_SHOW_REMINDER, item.isChecked());
+                editor.commit();
                 return true;
             default:
                 return super.onContextItemSelected(item);

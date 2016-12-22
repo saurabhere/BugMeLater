@@ -2,6 +2,7 @@ package com.monkapproves.renotify;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,6 +32,8 @@ public class MyNotificationListenerService extends NotificationListenerService {
     private Map<String, StatusBarNotification> snoozedNotifs = new HashMap<String, StatusBarNotification>();
     SharedPreferences preferences;
     private NLServiceReceiver nlservicereciver;
+    private Notification reminderNotification;
+    private boolean reminderNotificationBeingShown;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -44,6 +48,20 @@ public class MyNotificationListenerService extends NotificationListenerService {
                 onInterruptionFilterChanged(0);
             }
         };
+
+        Intent intent = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
+        intent.putExtra("command", "flush");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        reminderNotification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_action_renotify)
+                .setContentTitle(getString(R.string.reminder_notification_title))
+                .setContentText(getString(R.string.reminder_notification_text))
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setOngoing(true)
+                .addAction(new NotificationCompat.Action.Builder(R.drawable.ic_info_black_24dp, "Show All", pendingIntent )
+                        .build())
+                .build();
     }
 
     @Override
@@ -55,7 +73,10 @@ public class MyNotificationListenerService extends NotificationListenerService {
     {
         Boolean block_notifs = preferences.getBoolean(SettingsActivity.PREF_KEY_BLOCK_NOTIFICATIONS, false);
         if(!block_notifs)
+        {
+            hideReminderNotification();
             return false;
+        }
         Boolean interruptions = preferences.getBoolean(SettingsActivity.PREF_KEY_INTERRUPTIONS, false);
         Boolean workHoursSwitch = preferences.getBoolean(SettingsActivity.PREF_KEY_WORK_HOURS, false);
         Long currentDateTime = new Date().getTime();
@@ -70,10 +91,33 @@ public class MyNotificationListenerService extends NotificationListenerService {
                 && preferences.getLong(SettingsActivity.PREF_KEY_WORK_HOURS_START, 0) <  currentTime
                 && currentTime < preferences.getLong(SettingsActivity.PREF_KEY_WORK_HOURS_END, 0)
         ))
+        {
+            showReminderNotification();
             return true;
+        }
+        hideReminderNotification();
         return false;
     }
-
+    private void showReminderNotification()
+    {
+        if(!reminderNotificationBeingShown && preferences.getBoolean(SettingsActivity.PREF_SHOW_REMINDER, false))
+        {
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(999, reminderNotification);
+            reminderNotificationBeingShown = true;
+        }
+    }
+    private void hideReminderNotification()
+    {
+        if(reminderNotificationBeingShown)
+        {
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.cancel(999);
+            reminderNotificationBeingShown = false;
+        }
+    }
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Notification notif = sbn.getNotification();
@@ -161,6 +205,16 @@ public class MyNotificationListenerService extends NotificationListenerService {
                     timer.schedule(timerTask, date , 24*3600*1000);
                 }
                 break;
+            case SettingsActivity.PREF_SHOW_REMINDER:
+                if(preferences.getBoolean(SettingsActivity.PREF_SHOW_REMINDER, false))
+                {
+                    if(isCriteriaMet())
+                        showReminderNotification();
+                }
+                else
+                {
+                    hideReminderNotification();
+                }
         }
     }
 

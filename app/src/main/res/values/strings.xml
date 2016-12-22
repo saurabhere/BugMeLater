@@ -40,7 +40,10 @@
 
     <string name="help">Help &amp; Feedback</string>
     <string name="test_notif">Send a Test Notification</string>
+    <string name="reminder_notif">Show a notification while blocking</string>
     <string name="show_all">Show all</string>
     <string name="test_notification_title">Hey there!</string>
     <string name="test_notification_text">Verify everything is setup perfectly.</string>
+    <string name="reminder_notification_title">Renotify is Active.</string>
+    <string name="reminder_notification_text">Your notifications are being blocked.</string>
 </resources>
