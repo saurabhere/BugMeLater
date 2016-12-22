@@ -16,8 +16,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyNotificationListenerService extends NotificationListenerService {
+
+    private TimerTask timerTask;
+    private Timer timer;
     private String TAG = this.getClass().getSimpleName();
     private Map<String, StatusBarNotification> snoozedNotifs = new HashMap<String, StatusBarNotification>();
     SharedPreferences preferences;
@@ -30,13 +35,40 @@ public class MyNotificationListenerService extends NotificationListenerService {
         filter.addAction("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
         registerReceiver(nlservicereciver, filter);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                onInterruptionFilterChanged(0);
+            }
+        };
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(nlservicereciver);
+    }
+    private boolean isCriteriaMet()
+    {
+        Boolean block_notifs = preferences.getBoolean(SettingsActivity.PREF_KEY_BLOCK_NOTIFICATIONS, false);
+        if(!block_notifs)
+            return false;
+        Boolean interruptions = preferences.getBoolean(SettingsActivity.PREF_KEY_INTERRUPTIONS, false);
+        Boolean workHoursSwitch = preferences.getBoolean(SettingsActivity.PREF_KEY_WORK_HOURS, false);
+        Long currentDateTime = new Date().getTime();
+        Date d = new Date();
+        d.setHours(0);
+        d.setMinutes(0);
+        d.setSeconds(0);
+        Long currentTime = currentDateTime - d.getTime() + d.getTimezoneOffset()*60*1000;
+        if((interruptions && getCurrentInterruptionFilter() >=
+                Integer.parseInt(preferences.getString(SettingsActivity.PREF_KEY_INTERRUPTION_FILTER, "0")))
+                || (workHoursSwitch
+                && preferences.getLong(SettingsActivity.PREF_KEY_WORK_HOURS_START, 0) <  currentTime
+                && currentTime < preferences.getLong(SettingsActivity.PREF_KEY_WORK_HOURS_END, 0)
+        ))
+            return true;
+        return false;
     }
 
     @Override
@@ -45,24 +77,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
         if(notif.extras.getChar("replayed") == 'Y') {
             return;
         }
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean block_notifs = preferences.getBoolean("pref_key_block_notifications", false);
-        if(!block_notifs)
-            return;
-        Boolean interruptions = preferences.getBoolean("pref_key_block_by_interruption", false);
-        Boolean workHoursSwitch = preferences.getBoolean("pref_key_work_hours", false);
-        Long currentDateTime = new Date().getTime();
-        Date d = new Date();
-        d.setHours(0);
-        d.setMinutes(0);
-        d.setSeconds(0);
-        Long currentTime = currentDateTime - d.getTime() + d.getTimezoneOffset()*60*1000;
-        if((interruptions && getCurrentInterruptionFilter() >=
-                Integer.parseInt(preferences.getString("pref_key_interruption_filter_settings", "0")))
-                || (workHoursSwitch
-                    && preferences.getLong("pref_key_work_hours_start", 0) <  currentTime
-                    && currentTime < preferences.getLong("pref_key_work_hours_end", 0)
-                    ))
+        if(isCriteriaMet())
         {
             if (sbn.isOngoing()
                     || !sbn.isClearable()
@@ -84,7 +99,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
     @Override
     public void onInterruptionFilterChanged(int interruptionFilter)
     {
-        if(interruptionFilter == NotificationManager.INTERRUPTION_FILTER_ALL)
+        if(!isCriteriaMet())
             flushAllSnoozedNotifs();
     }
     public void flushAllSnoozedNotifs()
@@ -118,6 +133,34 @@ public class MyNotificationListenerService extends NotificationListenerService {
         snoozedNotifs.clear();
         cancelAllNotifications();
     }
+
+    public void onPreferenceChanged(String key) {
+        onInterruptionFilterChanged(0);
+        switch (key) {
+            case SettingsActivity.PREF_KEY_BLOCK_NOTIFICATIONS:
+            case SettingsActivity.PREF_KEY_WORK_HOURS:
+            case SettingsActivity.PREF_KEY_WORK_HOURS_END:
+                if(timer != null)
+                {
+                    timer.cancel();
+                    timerTask.cancel();
+                    timer = null;
+                }
+                if (preferences.getBoolean(SettingsActivity.PREF_KEY_BLOCK_NOTIFICATIONS, false)
+                        && preferences.getBoolean(SettingsActivity.PREF_KEY_WORK_HOURS, false))
+                {
+                    timer = new Timer();
+                    Date date = new Date();
+                    long endTime = preferences.getLong(SettingsActivity.PREF_KEY_WORK_HOURS_END, 0);
+                    date.setHours((int) (endTime / 3600000));
+                    date.setMinutes((int) (endTime % 3600000 / 60000) - date.getTimezoneOffset());
+                    date.setSeconds(0);
+                    timer.schedule(timerTask, date , 24*3600*1000);
+                }
+                break;
+        }
+    }
+
     class NLServiceReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -125,6 +168,8 @@ public class MyNotificationListenerService extends NotificationListenerService {
                 MyNotificationListenerService.this.flushAllSnoozedNotifs();
             } else if(intent.getStringExtra("command").equals("clearAll")){
                 MyNotificationListenerService.this.clearAllNotifs();
+            } else if(intent.getStringExtra("command").equals("prefChanged")) {
+                MyNotificationListenerService.this.onPreferenceChanged(intent.getStringExtra("pref"));
             }
         }
     }

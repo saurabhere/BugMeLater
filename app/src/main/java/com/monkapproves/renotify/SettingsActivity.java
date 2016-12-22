@@ -15,7 +15,12 @@ import android.view.MenuItem;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private AppCompatDelegate mDelegate;
-    private static final String PREF_KEY_BLOCK_NOTIFICATIONS = "pref_key_block_notifications";
+    public static final String PREF_KEY_BLOCK_NOTIFICATIONS = "pref_key_block_notifications";
+    public static final String PREF_KEY_INTERRUPTIONS = "pref_key_block_by_interruption";
+    public static final String PREF_KEY_INTERRUPTION_FILTER = "pref_key_interruption_filter_settings";
+    public static final String PREF_KEY_WORK_HOURS = "pref_key_work_hours";
+    public static final String PREF_KEY_WORK_HOURS_START = "pref_key_work_hours_start";
+    public static final String PREF_KEY_WORK_HOURS_END = "pref_key_work_hours_end";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,15 +97,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        switch (key) {
-            case PREF_KEY_BLOCK_NOTIFICATIONS:
-                if (!sharedPreferences.getBoolean(key, false)) {
-                    Intent i = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
-                    i.putExtra("command", "flush");
-                    sendBroadcast(i);
-                }
-                break;
-        }
+        Intent i = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
+        i.putExtra("command", "prefChanged");
+        i.putExtra("pref", key);
+        sendBroadcast(i);
     }
 
     @Override
