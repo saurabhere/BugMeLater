@@ -24,6 +24,18 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRun", true);
+
+        if (isFirstRun) {
+            //show start activity
+            startActivity(new Intent(SettingsActivity.this, IntroActivity.class));
+        }
+
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstRun", false).commit();
+
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);

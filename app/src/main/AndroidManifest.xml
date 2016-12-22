@@ -4,7 +4,6 @@
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="21" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,17 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.monkapproves.renotify.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".IntroActivity"
+            android:theme="@style/Theme.Intro" />
         <service
-            android:name="com.monkapproves.renotify.MyNotificationListenerService"
+            android:name=".MyNotificationListenerService"
             android:label="@string/notification_listener_service_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -30,5 +30,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>
