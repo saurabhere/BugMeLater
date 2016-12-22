@@ -22,7 +22,7 @@
     <string name="pref_block_notifications_description">Block notifications while you are busy and see them later</string>
     <string name="pref_block_by_interruption_title">Interruptions</string>
     <string name="pref_block_by_interruption_description">Block notifications based on system interruptions filter</string>
-    <string name="pref_interruption_filter_settings_title">Set interruptions filter</string>
+    <string name="pref_interruption_filter_settings_title">Select interruptions filter</string>
 
     <string name="pref_work_hours_title">Work hours</string>
     <string name="pref_work_hours_description">Block notifications based on your work hours</string>

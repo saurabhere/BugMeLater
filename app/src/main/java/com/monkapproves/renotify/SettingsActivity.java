@@ -1,6 +1,7 @@
 package com.monkapproves.renotify;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.annotation.LayoutRes;
@@ -12,8 +13,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private AppCompatDelegate mDelegate;
+    private static final String PREF_KEY_BLOCK_NOTIFICATIONS = "pref_key_block_notifications";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,22 @@ public class SettingsActivity extends PreferenceActivity {
         setContentView(R.layout.activity_settings);
         setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
         addPreferencesFromResource(R.xml.preferences);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set up a listener whenever a key changes
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the listener whenever a key changes
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -71,6 +89,20 @@ public class SettingsActivity extends PreferenceActivity {
         }
         return mDelegate;
     }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch (key) {
+            case PREF_KEY_BLOCK_NOTIFICATIONS:
+                if (!sharedPreferences.getBoolean(key, false)) {
+                    Intent i = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
+                    i.putExtra("command", "flush");
+                    sendBroadcast(i);
+                }
+                break;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

@@ -32,6 +32,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -56,7 +57,8 @@ public class MyNotificationListenerService extends NotificationListenerService {
         d.setMinutes(0);
         d.setSeconds(0);
         Long currentTime = currentDateTime - d.getTime() + d.getTimezoneOffset()*60*1000;
-        if((interruptions && getCurrentInterruptionFilter() >= preferences.getInt("pref_key_interruption_filter_settings", 0))
+        if((interruptions && getCurrentInterruptionFilter() >=
+                Integer.parseInt(preferences.getString("pref_key_interruption_filter_settings", "0")))
                 || (workHoursSwitch
                     && preferences.getLong("pref_key_work_hours_start", 0) <  currentTime
                     && currentTime < preferences.getLong("pref_key_work_hours_end", 0)

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.monkapproves.bugmeagain"
+        applicationId "com.monkapproves.renotify"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
