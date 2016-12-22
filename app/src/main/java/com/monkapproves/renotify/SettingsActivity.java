@@ -1,9 +1,11 @@
 package com.monkapproves.renotify;
 import android.app.NotificationManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private AppCompatDelegate mDelegate;
@@ -31,10 +34,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             //show start activity
             startActivity(new Intent(SettingsActivity.this, IntroActivity.class));
         }
-
-
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                 .putBoolean("isFirstRun", false).commit();
+
+        checkNotificationAccess();
 
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
@@ -44,9 +47,22 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         addPreferencesFromResource(R.xml.preferences);
     }
 
+    private void checkNotificationAccess()
+    {
+        ContentResolver contentResolver = getApplicationContext().getContentResolver();
+        String enabledNotificationListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
+        String packageName = getApplicationContext().getPackageName();
+
+        if (enabledNotificationListeners == null || !enabledNotificationListeners.contains(packageName))
+        {
+            Toast.makeText(this, "Please grant Notfication Access for Renotify to work.", Toast.LENGTH_LONG).show();
+            //DO SOME FLASHY STUFF TO THE UI.
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
+        checkNotificationAccess();
         // Set up a listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
