@@ -3,6 +3,7 @@ package com.monkapproves.renotify;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,7 +32,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
     private Map<String, StatusBarNotification> snoozedNotifs = new HashMap<String, StatusBarNotification>();
     SharedPreferences preferences;
     private NLServiceReceiver nlservicereciver;
-    private Notification reminderNotification;
+    private NotificationCompat.Builder reminderNotificationBuilder;
     private boolean reminderNotificationBeingShown;
     @Override
     public void onCreate() {
@@ -49,17 +51,26 @@ public class MyNotificationListenerService extends NotificationListenerService {
 
         Intent intent = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
         intent.putExtra("command", "flush");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+        Intent resultIntent = new Intent(this, SettingsActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(SettingsActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        PendingIntent actionPendingIntent = PendingIntent.getBroadcast(this, 0,
                 intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        reminderNotification = new NotificationCompat.Builder(this)
+        reminderNotificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_action_renotify)
                 .setContentTitle(getString(R.string.reminder_notification_title))
                 .setContentText(getString(R.string.reminder_notification_text))
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .setOngoing(true)
-                .addAction(new NotificationCompat.Action.Builder(R.drawable.ic_info_black_24dp, "Show All", pendingIntent )
-                        .build())
-                .build();
+                .setContentIntent(resultPendingIntent)
+                .addAction(new NotificationCompat.Action.Builder(R.drawable.ic_info_black_24dp, getString(R.string.show_all), actionPendingIntent)
+                        .build());
     }
 
     @Override
@@ -98,12 +109,26 @@ public class MyNotificationListenerService extends NotificationListenerService {
     }
     private void showReminderNotification()
     {
-        if(!reminderNotificationBeingShown && preferences.getBoolean(SettingsActivity.PREF_SHOW_REMINDER, false))
+        if(!reminderNotificationBeingShown && preferences.getBoolean(SettingsActivity.PREF_SHOW_REMINDER, false)) {
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(999, reminderNotificationBuilder.build());
+            reminderNotificationBeingShown = true;
+        }
+    }
+    private void updateReminderNotification()
+    {
+        if(reminderNotificationBeingShown && preferences.getBoolean(SettingsActivity.PREF_SHOW_REMINDER, false))
         {
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.notify(999, reminderNotification);
-            reminderNotificationBeingShown = true;
+            if(snoozedNotifs.size() == 0)
+                reminderNotificationBuilder.setContentText(getString(R.string.reminder_notification_text));
+            else if(snoozedNotifs.size() == 1)
+                reminderNotificationBuilder.setContentText(getString(R.string.reminder_notification_text_with_count, snoozedNotifs.size()));
+            else
+                reminderNotificationBuilder.setContentText(getString(R.string.reminder_notification_text_with_count_plural, snoozedNotifs.size()));
+            notificationManager.notify(999, reminderNotificationBuilder.build());
         }
     }
     private void hideReminderNotification()
@@ -141,6 +166,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
             }
             snoozedNotifs.put(sbn.getKey(), sbn);
             cancelNotification(sbn.getKey());
+            updateReminderNotification();
         }
     }
     @Override
@@ -174,6 +200,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
             mNotifyMgr.notify(sbn.getId(), notif);
         }
         snoozedNotifs.clear();
+        updateReminderNotification();
     }
     public void clearAllNotifs()
     {
