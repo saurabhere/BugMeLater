@@ -4,21 +4,19 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
@@ -124,7 +122,9 @@ public class MyNotificationListenerService extends NotificationListenerService {
         if(notif.extras.getChar("replayed") == 'Y') {
             return;
         }
-        if(isCriteriaMet())
+        boolean isExcluded = preferences.getStringSet("excludeApps", new HashSet<String>())
+                .contains(sbn.getPackageName());
+        if(!isExcluded && isCriteriaMet())
         {
             if (sbn.isOngoing()
                     || !sbn.isClearable()
