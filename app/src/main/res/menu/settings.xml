@@ -12,9 +12,4 @@
         android:id="@+id/btnCreateNotify"
         android:title="@string/test_notif"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/pref_show_reminder"
-        android:title="@string/reminder_notif"
-        app:showAsAction="never"
-        android:checkable="true" />
 </menu>

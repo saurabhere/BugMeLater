@@ -56,7 +56,10 @@
             android:defaultValue="05:00 PM"
             android:dependency="pref_key_work_hours"/>
     </PreferenceCategory>
-
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_show_reminder"
+        android:title="@string/reminder_notif" />
     <!--<PreferenceCategory-->
         <!--android:title="Snoozing notifications"-->
         <!--android:key="pref_key_snooze_settings">-->

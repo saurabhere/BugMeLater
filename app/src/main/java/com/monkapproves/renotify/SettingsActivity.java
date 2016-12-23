@@ -158,13 +158,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 i.putExtra("command", "flush");
                 sendBroadcast(i);
                 return true;
-            case R.id.pref_show_reminder:
-                item.setChecked(!item.isChecked());
-                mPreferences
-                        .edit()
-                        .putBoolean(PREF_SHOW_REMINDER, item.isChecked())
-                        .apply();
-                return true;
             default:
                 return super.onContextItemSelected(item);
         }
