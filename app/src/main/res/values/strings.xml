@@ -7,11 +7,12 @@
     <string name="start">Start</string>
     <string name="end">End</string>
     <string name="icon_default_text">Icon image</string>
+    <string name="toast_provide_access">Please grant Notification Access for Renotify to work</string>
     <!-- Strings related to Settings -->
 
     <!--System notification settings-->
     <string name="pref_exclude_apps_title">Exclude apps from Renotify</string>
-    <string name="pref_exclude_apps_description">You can choose which app notifications will not be blocked</string>
+    <string name="pref_exclude_apps_description">You can choose which app notifications will not be suspended</string>
     <string name="pref_system_notification_settings_title">System notification settings</string>
     <string name="pref_system_notification_settings_summary">Change notification access for Renotify</string>
 
@@ -20,15 +21,15 @@
     <string name="pref_snooze_description">When this feature is turned on, you can snooze notifications to a time or place</string>
 
     <!-- Blocking notifications -->
-    <string name="pref_block_notifications_settings_title">Blocking notifications</string>
+    <string name="pref_block_notifications_settings_title">Suspend notifications</string>
     <string name="pref_block_notifications_title">Do not disturb</string>
-    <string name="pref_block_notifications_description">Block notifications while you are busy and see them later</string>
+    <string name="pref_block_notifications_description">Suspend notifications while you are busy and see them later</string>
     <string name="pref_block_by_interruption_title">Interruptions</string>
-    <string name="pref_block_by_interruption_description">Block notifications based on system interruptions filter</string>
+    <string name="pref_block_by_interruption_description">Suspend notifications based on system interruptions filter</string>
     <string name="pref_interruption_filter_settings_title">Select interruptions filter</string>
 
     <string name="pref_work_hours_title">Work hours</string>
-    <string name="pref_work_hours_description">Block notifications based on your work hours</string>
+    <string name="pref_work_hours_description">Suspend notifications based on your work hours</string>
 
     <string-array name="pref_interruption_filters_titles">
         <item>Priority</item>
@@ -43,12 +44,12 @@
 
     <string name="help">Help &amp; Feedback</string>
     <string name="test_notif">Send a Test Notification</string>
-    <string name="reminder_notif">Show a notification while blocking</string>
+    <string name="reminder_notif">Show a notification while suspending</string>
     <string name="show_all">Show all</string>
     <string name="test_notification_title">Hey there!</string>
     <string name="test_notification_text">Verify everything is setup perfectly</string>
     <string name="reminder_notification_title">Renotify is Active</string>
-    <string name="reminder_notification_text">Your notifications are being blocked</string>
+    <string name="reminder_notification_text">Your notifications are being suspended</string>
     <string name="reminder_notification_text_with_count">%1$d notification suspended</string>
     <string name="reminder_notification_text_with_count_plural">%1$d notifications suspended</string>
 </resources>

@@ -62,7 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         if (enabledNotificationListeners == null || !enabledNotificationListeners.contains(packageName))
         {
-            Toast.makeText(this, "Please grant Notfication Access for Renotify to work.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.toast_provide_access), Toast.LENGTH_LONG).show();
             //DO SOME FLASHY STUFF TO THE UI.
         }
     }
