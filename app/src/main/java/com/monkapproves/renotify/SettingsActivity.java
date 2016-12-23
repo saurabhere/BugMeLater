@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -26,17 +27,20 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public static final String PREF_KEY_WORK_HOURS = "pref_key_work_hours";
     public static final String PREF_KEY_WORK_HOURS_START = "pref_key_work_hours_start";
     public static final String PREF_KEY_WORK_HOURS_END = "pref_key_work_hours_end";
+    SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                .getBoolean("isFirstRun", true);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean isFirstRun = mPreferences.getBoolean("isFirstRun", true);
 
         if (isFirstRun) {
             //show start activity
             startActivity(new Intent(SettingsActivity.this, IntroActivity.class));
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                    .putBoolean("isFirstRun", false).commit();
+            mPreferences
+                    .edit()
+                    .putBoolean("isFirstRun", false)
+                    .apply();
         }
         else
         {
@@ -156,10 +160,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return true;
             case R.id.pref_show_reminder:
                 item.setChecked(!item.isChecked());
-                SharedPreferences settings = getPreferenceScreen().getSharedPreferences();
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean(PREF_SHOW_REMINDER, item.isChecked());
-                editor.commit();
+                mPreferences
+                        .edit()
+                        .putBoolean(PREF_SHOW_REMINDER, item.isChecked())
+                        .apply();
                 return true;
             default:
                 return super.onContextItemSelected(item);
