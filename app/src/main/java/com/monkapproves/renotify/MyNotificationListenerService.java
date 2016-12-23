@@ -34,6 +34,13 @@ public class MyNotificationListenerService extends NotificationListenerService {
     private NLServiceReceiver nlservicereciver;
     private NotificationCompat.Builder reminderNotificationBuilder;
     private boolean reminderNotificationBeingShown;
+
+    private class MyTimerTask extends TimerTask {
+        public void run() {
+            onInterruptionFilterChanged(0);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,12 +49,6 @@ public class MyNotificationListenerService extends NotificationListenerService {
         filter.addAction("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
         registerReceiver(nlservicereciver, filter);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                onInterruptionFilterChanged(0);
-            }
-        };
 
         Intent intent = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
         intent.putExtra("command", "flush");
@@ -216,14 +217,17 @@ public class MyNotificationListenerService extends NotificationListenerService {
             case SettingsActivity.PREF_KEY_WORK_HOURS_END:
                 if(timer != null)
                 {
-                    timer.cancel();
                     timerTask.cancel();
+                    timer.cancel();
+                    timer.purge();
                     timer = null;
+                    timerTask = null;
                 }
                 if (preferences.getBoolean(SettingsActivity.PREF_KEY_BLOCK_NOTIFICATIONS, false)
                         && preferences.getBoolean(SettingsActivity.PREF_KEY_WORK_HOURS, false))
                 {
                     timer = new Timer();
+                    timerTask = new MyTimerTask();
                     Date date = new Date();
                     long endTime = preferences.getLong(SettingsActivity.PREF_KEY_WORK_HOURS_END, 0);
                     date.setHours((int) (endTime / 3600000));
