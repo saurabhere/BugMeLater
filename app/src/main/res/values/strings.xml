@@ -6,9 +6,12 @@
     <string name="cancel">Cancel</string>
     <string name="start">Start</string>
     <string name="end">End</string>
+    <string name="icon_default_text">Icon image</string>
     <!-- Strings related to Settings -->
 
     <!--System notification settings-->
+    <string name="pref_exclude_apps_title">Exclude apps from Renotify</string>
+    <string name="pref_exclude_apps_description">You can choose which app notifications will not be blocked</string>
     <string name="pref_system_notification_settings_title">System notification settings</string>
     <string name="pref_system_notification_settings_summary">Change notification access for Renotify</string>
 

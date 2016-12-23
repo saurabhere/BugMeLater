@@ -21,6 +21,9 @@
         <activity
             android:name=".IntroActivity"
             android:theme="@style/Theme.Intro" />
+        <activity
+            android:name=".PreferenceListActivity"
+            android:theme="@style/AppTheme" />
         <service
             android:name=".MyNotificationListenerService"
             android:label="@string/notification_listener_service_name"
