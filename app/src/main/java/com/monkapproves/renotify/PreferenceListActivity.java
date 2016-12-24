@@ -3,7 +3,9 @@ package com.monkapproves.renotify;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +28,12 @@ import java.util.Set;
 public class PreferenceListActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
+
+    private static class PInfo {
+        String packageName;
+        Drawable icon;
+        CharSequence label;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -42,11 +51,32 @@ public class PreferenceListActivity extends AppCompatActivity {
         loadApps();
     }
 
-    private void loadApps() {
+    private boolean isSystemPackage(ResolveInfo resolveInfo) {
+        return ((resolveInfo.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+    }
+
+    private List<PInfo> getInstalledApps() {
+        List<PInfo> installedApps = new ArrayList<>();
+
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> apps = getPackageManager().queryIntentActivities(mainIntent, 0);
+        PInfo pInfo;
+        for (ResolveInfo info : apps) {
+            if (!isSystemPackage(info)) {
+                pInfo = new PInfo();
+                pInfo.packageName = info.activityInfo.packageName;
+                pInfo.icon = info.loadIcon(getPackageManager());
+                pInfo.label = info.loadLabel(getPackageManager());
+                installedApps.add(pInfo);
+            }
+        }
 
-        List<ResolveInfo> mApps = getPackageManager().queryIntentActivities(mainIntent, 0);
+        return installedApps;
+    }
+
+    private void loadApps() {
+        List<PInfo> apps = getInstalledApps();
 
         ListView listView = (ListView) findViewById(R.id.appListView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,7 +87,7 @@ public class PreferenceListActivity extends AppCompatActivity {
                 setAppPreference(checkBox);
             }
         });
-        listView.setAdapter(new AppsAdapter(this, mApps));
+        listView.setAdapter(new AppsAdapter(this, apps));
     }
 
     public void setAppPreference(View view) {
@@ -72,11 +102,15 @@ public class PreferenceListActivity extends AppCompatActivity {
 
     public class AppsAdapter extends BaseAdapter {
         private LayoutInflater inflater;
-        private List<ResolveInfo> mApps;
+        private List<PInfo> mApps;
 
-        AppsAdapter(Context context, List<ResolveInfo> mApps) {
+        AppsAdapter(Context context, List<PInfo> mApps) {
             this.inflater = LayoutInflater.from(context);
             this.mApps = mApps;
+        }
+
+        private boolean isSystemPackage(ResolveInfo resolveInfo) {
+            return ((resolveInfo.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -92,13 +126,12 @@ public class PreferenceListActivity extends AppCompatActivity {
             } else {
                 handler = (ViewHandler)convertView.getTag();
             }
-            ResolveInfo info = this.mApps.get(position);
-            String packageName = info.activityInfo.packageName;
-            handler.iconImage.setImageDrawable(info.loadIcon(getPackageManager()));
-            handler.textLabel.setText(info.loadLabel(getPackageManager()));
+            PInfo info = this.mApps.get(position);
+            handler.iconImage.setImageDrawable(info.icon);
+            handler.textLabel.setText(info.label);
             handler.checkBox.setChecked(mPreferences.getStringSet("excludeApps", new HashSet<String>())
-                    .contains(packageName));
-            handler.checkBox.setTag(packageName);
+                    .contains(info.packageName));
+            handler.checkBox.setTag(info.packageName);
 
             return convertView;
 
