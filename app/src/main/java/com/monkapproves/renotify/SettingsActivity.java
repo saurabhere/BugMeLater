@@ -144,7 +144,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             case R.id.btnCreateNotify:
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.drawable.ic_action_renotify)
+                                .setSmallIcon(R.drawable.ic_stat_name)
                                 .setContentTitle(getString(R.string.test_notification_title))
                                 .setContentText(getString(R.string.test_notification_text));
                 int mNotificationId = 001;

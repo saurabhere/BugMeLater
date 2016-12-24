@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -64,7 +63,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
         PendingIntent actionPendingIntent = PendingIntent.getBroadcast(this, 0,
                 intent, PendingIntent.FLAG_CANCEL_CURRENT);
         reminderNotificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_action_renotify)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(getString(R.string.reminder_notification_title))
                 .setContentText(getString(R.string.reminder_notification_text))
                 .setCategory(Notification.CATEGORY_SERVICE)
