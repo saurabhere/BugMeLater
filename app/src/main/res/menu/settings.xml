@@ -5,11 +5,15 @@
         android:icon="@drawable/ic_action_renotify"
         app:showAsAction="ifRoom|withText" />
     <item
-        android:id="@+id/action_feedback"
+        android:id="@+id/action_create_notif"
+        android:title="@string/test_notif"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_help"
         android:title="@string/help"
         app:showAsAction="never" />
     <item
-        android:id="@+id/btnCreateNotify"
-        android:title="@string/test_notif"
+        android:id="@+id/action_feedback"
+        android:title="@string/feedback"
         app:showAsAction="never" />
 </menu>

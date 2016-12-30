@@ -1,4 +1,4 @@
-package com.monkapproves.renotify;
+package com.monkapproves.renotify.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +20,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.monkapproves.renotify.R;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PreferenceListActivity extends AppCompatActivity {
+public class AppListActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
 
@@ -103,9 +105,11 @@ public class PreferenceListActivity extends AppCompatActivity {
     public class AppsAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private List<PInfo> mApps;
+        private Set<String> mDefaultExcludeApps = new HashSet<>();
 
         AppsAdapter(Context context, List<PInfo> mApps) {
             this.inflater = LayoutInflater.from(context);
+            this.mDefaultExcludeApps.add(context.getPackageName());
             this.mApps = mApps;
         }
 
@@ -114,7 +118,6 @@ public class PreferenceListActivity extends AppCompatActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-
             ViewHandler handler;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.preferencelist_item, null);
@@ -129,7 +132,7 @@ public class PreferenceListActivity extends AppCompatActivity {
             PInfo info = this.mApps.get(position);
             handler.iconImage.setImageDrawable(info.icon);
             handler.textLabel.setText(info.label);
-            handler.checkBox.setChecked(mPreferences.getStringSet("excludeApps", new HashSet<String>())
+            handler.checkBox.setChecked(mPreferences.getStringSet("excludeApps", mDefaultExcludeApps)
                     .contains(info.packageName));
             handler.checkBox.setTag(info.packageName);
 

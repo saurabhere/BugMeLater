@@ -7,26 +7,20 @@
         android:persistent="true">
         <intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"/>
     </PreferenceScreen>
-
+    <Preference
+        android:title="@string/pref_exclude_apps_title"
+        android:summary="@string/pref_exclude_apps_description">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.monkapproves.renotify"
+            android:targetClass="com.monkapproves.renotify.settings.AppListActivity" />
+    </Preference>
     <PreferenceCategory
         android:title="@string/pref_block_notifications_settings_title"
         android:key="pref_key_block_notifications_settings">
-        <SwitchPreference
-            android:title="@string/pref_block_notifications_title"
-            android:summary="@string/pref_block_notifications_description"
-            android:key="pref_key_block_notifications"/>
-        <Preference
-            android:title="@string/pref_exclude_apps_title"
-            android:summary="@string/pref_exclude_apps_description">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.monkapproves.renotify"
-                android:targetClass="com.monkapproves.renotify.PreferenceListActivity" />
-        </Preference>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_key_block_by_interruption"
-            android:dependency="pref_key_block_notifications"
             android:title="@string/pref_block_by_interruption_title"
             android:summary="@string/pref_block_by_interruption_description" />
         <ListPreference
@@ -42,32 +36,21 @@
         <CheckBoxPreference
             android:title="@string/pref_work_hours_title"
             android:key="pref_key_work_hours"
-            android:dependency="pref_key_block_notifications"
             android:summary="@string/pref_work_hours_description">
         </CheckBoxPreference>
-        <com.monkapproves.renotify.preferences.TimePreference
+        <com.monkapproves.renotify.settings.preferences.TimePreference
             android:key="pref_key_work_hours_start"
             android:title="@string/start"
             android:defaultValue="09:00 AM"
             android:dependency="pref_key_work_hours"/>
-        <com.monkapproves.renotify.preferences.TimePreference
+        <com.monkapproves.renotify.settings.preferences.TimePreference
             android:key="pref_key_work_hours_end"
             android:title="@string/end"
             android:defaultValue="05:00 PM"
-            android:dependency="pref_key_work_hours"/>
+            android:dependency="pref_key_work_hours" />
     </PreferenceCategory>
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_show_reminder"
         android:title="@string/reminder_notif" />
-    <!--<PreferenceCategory-->
-        <!--android:title="Snoozing notifications"-->
-        <!--android:key="pref_key_snooze_settings">-->
-        <!--<SwitchPreference-->
-            <!--android:defaultValue="false"-->
-            <!--android:key="pref_key_snooze"-->
-            <!--android:summary="@string/pref_snooze_description"-->
-            <!--android:title="@string/pref_snooze_title"/>-->
-    <!--</PreferenceCategory>-->
-
 </PreferenceScreen>

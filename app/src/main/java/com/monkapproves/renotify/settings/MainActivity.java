@@ -1,12 +1,10 @@
-package com.monkapproves.renotify;
+package com.monkapproves.renotify.settings;
 import android.app.NotificationManager;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -15,9 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+import com.monkapproves.renotify.R;
+
+public class MainActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private AppCompatDelegate mDelegate;
 
     public static final String PREF_SHOW_REMINDER = "pref_show_reminder";
@@ -32,44 +31,24 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean isFirstRun = mPreferences.getBoolean("isFirstRun", true);
-
-        if (isFirstRun) {
-            //show start activity
-            startActivity(new Intent(SettingsActivity.this, IntroActivity.class));
-            mPreferences
-                    .edit()
-                    .putBoolean("isFirstRun", false)
-                    .apply();
-        }
-        else
-        {
-            checkNotificationAccess();
-        }
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        setSupportActionBar(toolbar);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
         addPreferencesFromResource(R.xml.preferences);
     }
 
-    private void checkNotificationAccess()
-    {
-        ContentResolver contentResolver = getApplicationContext().getContentResolver();
-        String enabledNotificationListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
-        String packageName = getApplicationContext().getPackageName();
-
-        if (enabledNotificationListeners == null || !enabledNotificationListeners.contains(packageName))
-        {
-            Toast.makeText(this, getString(R.string.toast_provide_access), Toast.LENGTH_LONG).show();
-            //DO SOME FLASHY STUFF TO THE UI.
-        }
-    }
     @Override
     protected void onResume() {
         super.onResume();
-        checkNotificationAccess();
         // Set up a listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
@@ -141,7 +120,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.btnCreateNotify:
+            case R.id.action_create_notif:
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.drawable.ic_stat_name)
@@ -153,7 +132,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 // Builds the notification and issues it.
                 mNotifyMgr.notify(mNotificationId, mBuilder.build());
                 return true;
-            case R.id.action_renotify:
+            case R.id.action_power:
                 Intent i = new Intent("com.monkapproves.bugmelater.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
                 i.putExtra("command", "flush");
                 sendBroadcast(i);

@@ -1,13 +1,13 @@
-package com.monkapproves.renotify;
+package com.monkapproves.renotify.welcome;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Toast;
+
+import com.monkapproves.renotify.R;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
 import agency.tango.materialintroscreen.MessageButtonBehaviour;

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Renotify</string>
+    <string name="settings">Settings</string>
     <string name="notification_listener_service_name">@string/app_name</string>
 
     <string name="set">Set</string>
@@ -24,17 +25,17 @@
     <string name="pref_block_notifications_settings_title">Suspend notifications</string>
     <string name="pref_block_notifications_title">Do not disturb</string>
     <string name="pref_block_notifications_description">Suspend notifications while you are busy and see them later</string>
-    <string name="pref_block_by_interruption_title">Interruptions</string>
-    <string name="pref_block_by_interruption_description">Suspend notifications based on system interruptions filter</string>
-    <string name="pref_interruption_filter_settings_title">Select interruptions filter</string>
+    <string name="pref_block_by_interruption_title">Do not disturb (DND)</string>
+    <string name="pref_block_by_interruption_description">Suspend notifications based on DND filter</string>
+    <string name="pref_interruption_filter_settings_title">Select DND filter</string>
 
     <string name="pref_work_hours_title">Work hours</string>
-    <string name="pref_work_hours_description">Suspend notifications based on your work hours</string>
+    <string name="pref_work_hours_description">Suspend notifications during your work hours</string>
 
     <string-array name="pref_interruption_filters_titles">
         <item>Priority</item>
         <item>Alarms</item>
-        <item>None</item>
+        <item>Total Silence</item>
     </string-array>
     <string-array name="pref_interruption_filters_values">
         <item>2</item>
@@ -42,9 +43,10 @@
         <item>3</item>
     </string-array>
 
-    <string name="help">Help &amp; Feedback</string>
+    <string name="help">Help</string>
+    <string name="feedback">Feedback</string>
     <string name="test_notif">Send a Test Notification</string>
-    <string name="reminder_notif">Show a notification while suspending</string>
+    <string name="reminder_notif">Show Renotify status in notification bar</string>
     <string name="show_all">Show all</string>
     <string name="test_notification_title">Hey there!</string>
     <string name="test_notification_text">Verify everything is setup perfectly</string>

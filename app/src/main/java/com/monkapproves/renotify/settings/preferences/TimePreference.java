@@ -1,4 +1,4 @@
-package com.monkapproves.renotify.preferences;
+package com.monkapproves.renotify.settings.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
